@@ -1,28 +1,40 @@
-import sqlite3
+import psycopg2
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
 
 def get_db():
-    conn = sqlite3.connect('db.sqlite')
-    conn.row_factory = sqlite3.Row
-    return conn
+    return psycopg2.connect(os.environ['postgresql://postgres:IbwdTkfDOsnJdAFLVfyXKHxrxlEhGAdc@postgres.railway.internal:5432/railway'])
+
 
 def init_db():
-    db = get_db()
-    db.executescript('''
+    conn = get_db()
+    cur = conn.cursor()
+
+    cur.execute('''
     CREATE TABLE IF NOT EXISTS clients (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id SERIAL PRIMARY KEY,
         name TEXT NOT NULL,
         sessions INTEGER NOT NULL
     );
+    ''')
+
+    cur.execute('''
     CREATE TABLE IF NOT EXISTS appointments (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        client_id INTEGER,
-        date TEXT,
-        time TEXT,
-        UNIQUE (date, time),
-        FOREIGN KEY (client_id) REFERENCES clients(id)
+        id SERIAL PRIMARY KEY,
+        client_id INTEGER REFERENCES clients(id) ON DELETE CASCADE,
+        date DATE NOT NULL,
+        time TIME NOT NULL,
+        UNIQUE (date, time)
     );
     ''')
-    db.commit()
+
+    conn.commit()
+    cur.close()
+    conn.close()
+    print("✅ Таблицы успешно созданы.")
+
 
 if __name__ == '__main__':
     init_db()
