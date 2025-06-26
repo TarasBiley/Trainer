@@ -144,3 +144,10 @@ if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
 
 
+@app.route('/init')
+def init_db_route():
+    from db import init_db
+    init_db()
+    return '✅ Таблицы созданы на Railway'
+
+
