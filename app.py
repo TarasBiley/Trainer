@@ -32,7 +32,6 @@ def menu():
 # Clients
 @app.route('/clients')
 def clients():
-    db = get_db()
     conn = get_db()
     cur = conn.cursor()
     cur.execute('SELECT * FROM clients')
@@ -46,98 +45,121 @@ def add_client():
     if request.method == 'POST':
         name = request.form['name']
         sessions = int(request.form['sessions'])
-        db = get_db()
-        db.execute('INSERT INTO clients (name, sessions) VALUES (?, ?)', (name, sessions))
-        db.commit()
+        conn = get_db()
+        cur = conn.cursor()
+        cur.execute('INSERT INTO clients (name, sessions) VALUES (%s, %s)', (name, sessions))
+        conn.commit()
+        cur.close()
+        conn.close()
         return redirect('/clients')
     return render_template('clients/add.html')
 
 @app.route('/clients/delete/<int:client_id>')
 def delete_client(client_id):
-    db = get_db()
-    db.execute('DELETE FROM clients WHERE id = ?', (client_id,))
-    db.commit()
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute('DELETE FROM clients WHERE id = %s', (client_id,))
+    conn.commit()
+    cur.close()
+    conn.close()
     return redirect('/clients')
 
 @app.route('/clients/add_sessions/<int:client_id>', methods=['POST'])
 def add_sessions(client_id):
     count = int(request.form['count'])
-    db = get_db()
-    db.execute('UPDATE clients SET sessions = sessions + ? WHERE id = ?', (count, client_id))
-    db.commit()
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute('UPDATE clients SET sessions = sessions + %s WHERE id = %s', (count, client_id))
+    conn.commit()
+    cur.close()
+    conn.close()
     return redirect('/clients')
 
 # Appointments
 @app.route('/appointments/create', methods=['GET', 'POST'])
 def create_appointment():
-    db = get_db()
+    conn = get_db()
+    cur = conn.cursor()
+
     if request.method == 'POST':
         client_id = request.form['client_id']
         date = request.form['date']
         time = request.form['time']
 
         # Проверка на пересечение
-        exists = db.execute('SELECT 1 FROM appointments WHERE date = ? AND time = ?', (date, time)).fetchone()
+        cur.execute('SELECT 1 FROM appointments WHERE date = %s AND time = %s', (date, time))
+        exists = cur.fetchone()
         if exists:
+            cur.close()
+            conn.close()
             return '''
                     <h2>Время занято</h2>
                     <a href="/appointments/create">Назад</a>
                 '''
 
-
         # Уменьшить количество занятий
-        db.execute('UPDATE clients SET sessions = sessions - 1 WHERE id = ? AND sessions > 0', (client_id,))
-        db.execute('INSERT INTO appointments (client_id, date, time) VALUES (?, ?, ?)', (client_id, date, time))
-        db.commit()
+        cur.execute('UPDATE clients SET sessions = sessions - 1 WHERE id = %s AND sessions > 0', (client_id,))
+        cur.execute('INSERT INTO appointments (client_id, date, time) VALUES (%s, %s, %s)', (client_id, date, time))
+        conn.commit()
+        cur.close()
+        conn.close()
         return redirect('/menu')
 
-    cur = db.cursor()
     cur.execute('SELECT * FROM clients WHERE sessions > 0')
     clients = cur.fetchall()
     cur.close()
+    conn.close()
     return render_template('appointments/create.html', clients=clients)
 
 @app.route('/appointments/delete', methods=['GET', 'POST'])
 def delete_appointment():
-    db = get_db()
     if request.method == 'POST':
         date = request.form['date']
-        appointments = db.execute('''
+        conn = get_db()
+        cur = conn.cursor()
+        cur.execute('''
             SELECT a.id, a.time, c.name FROM appointments a
             JOIN clients c ON a.client_id = c.id
-            WHERE a.date = ?
+            WHERE a.date = %s
             ORDER BY a.time
-        ''', (date,)).fetchall()
+        ''', (date,))
+        appointments = cur.fetchall()
+        cur.close()
+        conn.close()
         return render_template('appointments/delete.html', appointments=appointments, date=date)
 
     return render_template('appointments/delete.html', appointments=None, date=None)
 
 @app.route('/appointments/delete/<int:appt_id>')
 def delete_appt(appt_id):
-    db = get_db()
-    client_id = db.execute('SELECT client_id FROM appointments WHERE id = ?', (appt_id,)).fetchone()['client_id']
-    db.execute('DELETE FROM appointments WHERE id = ?', (appt_id,))
-    db.execute('UPDATE clients SET sessions = sessions + 1 WHERE id = ?', (client_id,))
-    db.commit()
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute('SELECT client_id FROM appointments WHERE id = %s', (appt_id,))
+    client_id = cur.fetchone()[0]
+    cur.execute('DELETE FROM appointments WHERE id = %s', (appt_id,))
+    cur.execute('UPDATE clients SET sessions = sessions + 1 WHERE id = %s', (client_id,))
+    conn.commit()
+    cur.close()
+    conn.close()
     return redirect('/menu')
 
 @app.route('/appointments/list', methods=['GET', 'POST'])
 def list_appointments():
-    db = get_db()
     if request.method == 'POST':
         date = request.form['date']
-        appointments = db.execute('''
+        conn = get_db()
+        cur = conn.cursor()
+        cur.execute('''
             SELECT a.id, a.time, c.name FROM appointments a
             JOIN clients c ON a.client_id = c.id
-            WHERE a.date = ?
+            WHERE a.date = %s
             ORDER BY a.time
-        ''', (date,)).fetchall()
+        ''', (date,))
+        appointments = cur.fetchall()
+        cur.close()
+        conn.close()
         return render_template('appointments/list.html', appointments=appointments, date=date)
     return render_template('appointments/list.html', appointments=None, date=None)
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
-
 
 @app.route('/init')
 def init_db_route():
@@ -145,4 +167,5 @@ def init_db_route():
     init_db()
     return '✅ Таблицы созданы на Railway'
 
-
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
