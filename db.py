@@ -5,7 +5,8 @@ load_dotenv()
 
 
 def get_db():
-    return psycopg2.connect(os.environ['postgresql://postgres:IbwdTkfDOsnJdAFLVfyXKHxrxlEhGAdc@postgres.railway.internal:5432/railway'])
+    return psycopg2.connect(os.environ['DATABASE_URL'])
+
 
 
 def init_db():
