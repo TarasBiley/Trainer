@@ -1,27 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Запись на занятие</title>
+  <title>Создать запись</title>
 </head>
 <body>
-    <h2>Записать на занятие</h2>
-    <form method="post">
-        <label>Подопечный:</label>
-        <select name="client_id" required>
-            {% for client in clients %}
-                <option value="{{ client.id }}">{{ client.name }} ({{ client.sessions }} занятий)</option>
-            {% endfor %}
-        </select><br><br>
+  <h2>Создать запись</h2>
+  <form method="post">
+    <label>Подопечный:</label>
+    <select name="client_id">
+      {% for client in clients %}
+        <option value="{{ client[0] }}">{{ client[1] }}</option>
+      {% endfor %}
+    </select><br>
 
-        <label>Дата:</label>
-        <input type="date" name="date" required><br><br>
+    <label>Дата:</label>
+    <input type="date" name="date"><br>
 
-        <label>Время:</label>
-        <input type="time" name="time" required><br><br>
+    <label>Время:</label>
+    <input type="time" name="time"><br>
 
-        <button type="submit">Сохранить</button>
-    </form>
-    <br>
-    <a href="/menu">Назад</a>
+    <button type="submit">Создать</button>
+  </form>
+  <a href="/menu">Назад</a>
 </body>
 </html>
