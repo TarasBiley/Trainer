@@ -1,26 +1,24 @@
 <!DOCTYPE html>
 <html>
-<head><title>Удалить запись</title></head>
+<head><title>Удалить занятие</title></head>
 <body>
-  <h2>Удалить запись</h2>
-
+  <h2>Удаление занятий</h2>
   <form method="post">
-    <label>Выберите дату:</label>
-    <input type="date" name="date">
+    <label>Выберите дату:</label><br>
+    <input type="date" name="date" required>
     <button type="submit">Показать</button>
   </form>
 
   {% if appointments %}
-    <h3>Записи на {{ date }}</h3>
     <ul>
-      {% for a in appointments %}
-        <li>{{ a.name }} — {{ a.time }}
-          <a href="/appointments/delete/{{ a.id }}">Удалить</a>
+      {% for appt in appointments %}
+        <li>{{ appt.time }} — {{ appt.name }}
+          <a href="/appointments/delete/{{ appt.id }}">Удалить</a>
         </li>
       {% endfor %}
     </ul>
   {% elif date %}
-    <p>Нет записей на эту дату.</p>
+    <p>Нет занятий на выбранную дату.</p>
   {% endif %}
 
   <a href="/menu">Назад</a>
