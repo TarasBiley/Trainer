@@ -1,23 +1,24 @@
 <!DOCTYPE html>
 <html>
-<head><title>Список подопечных</title></head>
+<head>
+    <title>Список подопечных</title>
+</head>
 <body>
-  <h2>Список подопечных</h2>
-  <a href="/clients/add">Добавить подопечного</a><br><br>
-
-  <ul>
-    {% for client in clients %}
-      <li>
-        {{ client.name }} — занятий {{ client.sessions }}
-        <form action="/clients/add_sessions/{{ client.id }}" method="post" style="display:inline;">
-          <input type="number" name="count" value="1" min="1" required>
-          <button type="submit">+ Занятий</button>
-        </form>
-        <a href="/clients/delete/{{ client.id }}">Удалить</a>
-      </li>
-    {% endfor %}
-  </ul>
-
-  <br><a href="/menu">Назад</a>
+    <h2>Список подопечных</h2>
+    <a href="/clients/add">Добавить подопечного</a>
+    <ul>
+        {% for client in clients %}
+        <li>
+            {{ client.name }} — занятий: {{ client.sessions }}
+            <form action="/clients/add_sessions/{{ client.id }}" method="post" style="display:inline;">
+                <input type="number" name="count" value="1" min="1">
+                <button type="submit">+ Занятий</button>
+            </form>
+            <a href="/clients/delete/{{ client.id }}">Удалить</a>
+        </li>
+        {% endfor %}
+    </ul>
+    <br>
+    <a href="/menu">Назад</a>
 </body>
 </html>
