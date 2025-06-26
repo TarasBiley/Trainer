@@ -86,7 +86,10 @@ def create_appointment():
         db.commit()
         return redirect('/menu')
 
-    clients = db.execute('SELECT * FROM clients WHERE sessions > 0').fetchall()
+    cur = db.cursor()
+    cur.execute('SELECT * FROM clients WHERE sessions > 0')
+    clients = cur.fetchall()
+    cur.close()
     return render_template('appointments/create.html', clients=clients)
 
 @app.route('/appointments/delete', methods=['GET', 'POST'])
