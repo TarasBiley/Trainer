@@ -1,5 +1,20 @@
-<form method="POST">
-  <input name="username" placeholder="Логин">
-  <input name="password" type="password" placeholder="Пароль">
-  <button type="submit">Войти</button>
-</form>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Вход</title>
+  <style>
+    body { font-family: sans-serif; padding: 2em; }
+    input, button { width: 100%; padding: 1em; margin: 1em 0; font-size: 1em; }
+    button { background: #28a745; color: white; border: none; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <h2>Вход</h2>
+  <form method="post">
+    <input type="text" name="username" placeholder="Логин" required>
+    <input type="password" name="password" placeholder="Пароль" required>
+    <button type="submit">Войти</button>
+  </form>
+</body>
+</html>

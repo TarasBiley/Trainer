@@ -1,25 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Список подопечных</title>
+  <style>
+    body { font-family: sans-serif; padding: 1em; }
+    li { margin-bottom: 1.2em; }
+    form { display: flex; gap: 0.5em; margin-top: 0.5em; }
+    input, button { flex: 1; padding: 0.5em; font-size: 1em; }
+    button, a { text-decoration: none; }
+  </style>
 </head>
 <body>
   <h2>Список подопечных</h2>
-
   <a href="/clients/add">Добавить подопечного</a>
   <ul>
     {% for client in clients %}
       <li>
-        {{ client[1] }} — занятий {{ client[2] }}
-        <form method="post" action="/clients/add_sessions/{{ client[0] }}" style="display:inline;">
-          <input name="count" type="number" value="1" min="1">
+        {{ client[1] }} — занятий: {{ client[2] }}
+        <form method="post" action="/clients/add_sessions/{{ client[0] }}">
+          <input type="number" name="count" value="1" min="1">
           <button type="submit">+ Занятий</button>
         </form>
         <a href="/clients/delete/{{ client[0] }}">Удалить</a>
       </li>
     {% endfor %}
   </ul>
-
   <a href="/menu">Назад</a>
 </body>
 </html>

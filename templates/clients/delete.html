@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Удалить подопечного</title>
+  <style>
+    body { font-family: sans-serif; padding: 1em; }
+    select, button, a {
+      width: 100%;
+      font-size: 1em;
+      margin-bottom: 1em;
+      padding: 1em;
+      border-radius: 8px;
+    }
+    button {
+      background: #dc3545;
+      color: white;
+      border: none;
+    }
+    a {
+      background: #6c757d;
+      color: white;
+      text-align: center;
+      text-decoration: none;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <h2>Удалить подопечного</h2>
+  <form method="post">
+    <select name="client_id" required>
+      {% for client in clients %}
+        <option value="{{ client[0] }}">{{ client[1] }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit">Удалить</button>
+  </form>
+  <a href="/clients">Назад</a>
+</body>
+</html>

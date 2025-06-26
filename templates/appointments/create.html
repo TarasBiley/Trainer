@@ -1,25 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Создать запись</title>
+  <style>
+    body { font-family: sans-serif; padding: 1em; }
+    select, input, button { width: 100%; padding: 1em; margin: 0.5em 0; font-size: 1em; }
+  </style>
 </head>
 <body>
-  <h2>Создать запись</h2>
+  <h2>Записать подопечного</h2>
   <form method="post">
-    <label>Подопечный:</label>
-    <select name="client_id">
+    <label>Подопечный</label>
+    <select name="client_id" required>
       {% for client in clients %}
         <option value="{{ client[0] }}">{{ client[1] }}</option>
       {% endfor %}
-    </select><br>
-
-    <label>Дата:</label>
-    <input type="date" name="date"><br>
-
-    <label>Время:</label>
-    <input type="time" name="time"><br>
-
-    <button type="submit">Создать</button>
+    </select>
+    <label>Дата</label>
+    <input type="date" name="date" required>
+    <label>Время</label>
+    <input type="time" name="time" required>
+    <button type="submit">Записать</button>
   </form>
   <a href="/menu">Назад</a>
 </body>

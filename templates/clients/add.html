@@ -1,11 +1,18 @@
 <!DOCTYPE html>
 <html>
-<head><title>Добавить подопечного</title></head>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Добавить подопечного</title>
+  <style>
+    body { font-family: sans-serif; padding: 1em; }
+    input, button { width: 100%; padding: 1em; margin: 0.5em 0; font-size: 1em; }
+  </style>
+</head>
 <body>
   <h2>Новый подопечный</h2>
   <form method="post">
-    <input name="name" placeholder="Имя" required><br><br>
-    <input name="sessions" type="number" placeholder="Занятий" value="1" min="0" required><br><br>
+    <input name="name" placeholder="Имя" required>
+    <input name="sessions" type="number" placeholder="Занятий" min="1" required>
     <button type="submit">Сохранить</button>
   </form>
   <a href="/clients">Назад</a>

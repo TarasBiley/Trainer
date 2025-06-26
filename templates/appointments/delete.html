@@ -1,28 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Удалить запись</title>
+  <style>
+    body { font-family: sans-serif; padding: 1em; }
+    form, input, button, a { width: 100%; font-size: 1em; margin-bottom: 1em; }
+    button, a { padding: 1em; display: block; text-align: center; background: #dc3545; color: white; border: none; border-radius: 8px; text-decoration: none; }
+  </style>
 </head>
 <body>
-  <h2>Удаление записи</h2>
+  <h2>Удалить запись</h2>
   <form method="post">
-    <label>Дата:</label>
-    <input type="date" name="date">
-    <button type="submit">Показать</button>
+    <input type="date" name="date" required>
+    <button type="submit">Показать записи</button>
   </form>
 
   {% if appointments %}
     <ul>
       {% for appt in appointments %}
-        <li>{{ appt[2] }} в {{ appt[1] }} —
+        <li>
+          {{ appt[1] }} — {{ appt[2] }}
           <a href="/appointments/delete/{{ appt[0] }}">Удалить</a>
         </li>
       {% endfor %}
     </ul>
-  {% elif date %}
-    <p>Нет записей на {{ date }}</p>
   {% endif %}
-
   <a href="/menu">Назад</a>
 </body>
 </html>

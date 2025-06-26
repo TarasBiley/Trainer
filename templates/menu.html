@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Меню</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Меню</title>
+  <style>
+    body { font-family: sans-serif; padding: 1em; }
+    a { display: block; margin: 1em 0; padding: 1em; background: #007bff; color: white; text-align: center; text-decoration: none; border-radius: 8px; }
+  </style>
 </head>
 <body>
-    <h2>Главное меню</h2>
-    <ul>
-        <li><a href="/clients">Подопечные</a></li>
-        <li><a href="/appointments/create">Записать на занятие</a></li>
-        <li><a href="/appointments/delete">Удалить занятие</a></li>
-        <li><a href="/appointments/list">Список занятий</a></li>
-    </ul>
-    <a href="/">Выйти</a>
+  <h2>Главное меню</h2>
+  <a href="/appointments/create">Записать</a>
+  <a href="/appointments/delete">Удалить запись</a>
+  <a href="/appointments/list">Список записей</a>
+  <a href="/clients">Подопечные</a>
 </body>
 </html>
