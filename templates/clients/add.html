@@ -4,8 +4,8 @@
 <body>
   <h2>Новый подопечный</h2>
   <form method="post">
-    <input name="name" placeholder="Имя"><br>
-    <input name="sessions" type="number" placeholder="Занятий"><br>
+    <input name="name" placeholder="Имя" required><br><br>
+    <input name="sessions" type="number" placeholder="Занятий" value="1" min="0" required><br><br>
     <button type="submit">Сохранить</button>
   </form>
   <a href="/clients">Назад</a>
