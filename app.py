@@ -33,7 +33,12 @@ def menu():
 @app.route('/clients')
 def clients():
     db = get_db()
-    clients = db.execute('SELECT * FROM clients').fetchall()
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute('SELECT * FROM clients')
+    clients = cur.fetchall()
+    cur.close()
+    conn.close()
     return render_template('clients/list.html', clients=clients)
 
 @app.route('/clients/add', methods=['GET', 'POST'])
