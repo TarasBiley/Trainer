@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head><title>Подопечные</title></head>
+<body>
+  <h2>Список подопечных</h2>
+  <a href="/clients/add">Добавить подопечного</a><br><br>
+  <ul>
+    {% for client in clients %}
+      <li>
+        {{ client.name }} — {{ client.sessions }} занятий
+        <form action="/clients/add_sessions/{{ client.id }}" method="post" style="display:inline;">
+          <input name="count" type="number" min="1" value="1">
+          <button type="submit">+ Занятий</button>
+        </form>
+        <a href="/clients/delete/{{ client.id }}">Удалить</a>
+      </li>
+    {% endfor %}
+  </ul>
+  <a href="/menu">Назад</a>
+</body>
+</html>

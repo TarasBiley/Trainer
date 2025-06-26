@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head><title>Список записей</title></head>
+<body>
+  <h2>Список записей</h2>
+
+  <form method="post">
+    <label>Выберите дату:</label>
+    <input type="date" name="date">
+    <button type="submit">Показать</button>
+  </form>
+
+  {% if appointments %}
+    <h3>Записи на {{ date }}</h3>
+    <ul>
+      {% for a in appointments %}
+        <li>{{ a.time }} — {{ a.name }}</li>
+      {% endfor %}
+    </ul>
+  {% elif date %}
+    <p>Нет записей на эту дату.</p>
+  {% endif %}
+
+  <a href="/menu">Назад</a>
+</body>
+</html>

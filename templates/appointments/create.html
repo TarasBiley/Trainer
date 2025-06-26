@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head><title>Записать подопечного</title></head>
+<body>
+  <h2>Записать</h2>
+  <form method="post">
+    <label>Подопечный:</label>
+    <select name="client_id">
+      {% for client in clients %}
+        <option value="{{ client.id }}">{{ client.name }} ({{ client.sessions }} занятий)</option>
+      {% endfor %}
+    </select><br><br>
+
+    <label>Дата:</label>
+    <input type="date" name="date" required><br>
+
+    <label>Время:</label>
+    <input type="time" name="time" step="3600" required>
+
+    <button type="submit">Записать</button>
+  </form>
+  <a href="/menu">Назад</a>
+</body>
+</html>
