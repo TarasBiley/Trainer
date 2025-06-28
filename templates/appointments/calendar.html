@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Записи</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: sans-serif; margin: 0; padding: 0; }
+    .day { border-bottom: 1px solid #ccc; padding: 1rem; }
+    .date { font-weight: bold; margin-bottom: 0.5rem; }
+    .appointments { margin-left: 1rem; }
+    button.add { background: #00aaff; color: white; border: none; padding: 0.4rem 0.6rem; border-radius: 6px; cursor: pointer; }
+    .loader { text-align: center; padding: 1rem; }
+  </style>
+</head>
+<body>
+
+<h2 style="text-align:center;">Календарь занятий</h2>
+<div id="calendar"></div>
+<div id="loader" class="loader">Загрузка...</div>
+
+<script>
+  let offset = 0;
+  let loading = false;
+
+  async function loadMore() {
+    if (loading) return;
+    loading = true;
+    document.getElementById('loader').style.display = 'block';
+
+    const res = await fetch(`/appointments/load_more?offset=${offset}`);
+    const data = await res.json();
+
+    const calendar = document.getElementById('calendar');
+    data.days.forEach(day => {
+      const dayDiv = document.createElement('div');
+      dayDiv.className = 'day';
+      dayDiv.innerHTML = `
+        <div class="date">${day.display}</div>
+        <div class="appointments">
+          ${day.appointments.map(a => `<div>${a.time} — ${a.name}</div>`).join('')}
+        </div>
+        <form method="get" action="/appointments/create">
+          <input type="hidden" name="date" value="${day.date}">
+          <button class="add" type="submit">+ Добавить</button>
+        </form>
+      `;
+      calendar.appendChild(dayDiv);
+    });
+
+    offset += data.days.length;
+    loading = false;
+    document.getElementById('loader').style.display = 'none';
+  }
+
+  window.addEventListener('scroll', () => {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
+      loadMore();
+    }
+  });
+
+  // Начальная загрузка
+  loadMore();
+</script>
+
+</body>
+</html>

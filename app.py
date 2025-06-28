@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, session
 from db import get_db, init_db
 import os
-from datetime import datetime
+from datetime import date, timedelta
 
 DATABASE_URL = os.environ.get("DATABASE_URL")
 
@@ -11,10 +11,10 @@ app.secret_key = os.environ.get('SECRET_KEY', 'supersecret')
 USERNAME = 'trainer'
 PASSWORD = '1234'
 
-from datetime import date, timedelta
-import locale
+@app.route('/appointments/calendar')
+def calendar():
+    return render_template('appointments/calendar.html')
 
-locale.setlocale(locale.LC_TIME, 'ru_RU.UTF-8')  # Работает на Unix/macOS. Для Windows: 'Russian_Russia.1251'
 
 @app.route('/appointments/create')
 def choose_date():
