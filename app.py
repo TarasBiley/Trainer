@@ -118,6 +118,11 @@ def create_appointment():
     conn.close()
     return redirect('/menu')
 
+# 🔁 Редирект если кто-то откроет /appointments/create через GET
+@app.route('/appointments/create', methods=['GET'])
+def redirect_from_create_get():
+    return redirect('/appointments/choose')
+
 # ❌ Отмена записи (минус)
 @app.route('/appointments/delete/<int:appt_id>')
 def delete_appt(appt_id):
