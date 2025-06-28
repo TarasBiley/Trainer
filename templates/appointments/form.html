@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Добавить запись</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f2f2f2;
+    }
+    header {
+      background: #00aaff;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+    form {
+      padding: 1rem;
+      background: white;
+      margin: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-size: 1rem;
+      color: #333;
+    }
+    select, input[type="time"] {
+      width: 100%;
+      padding: 0.6rem;
+      font-size: 1rem;
+      margin-top: 0.4rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 1.5rem;
+      width: 100%;
+      background: #00aaff;
+      color: white;
+      border: none;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #008ecc;
+    }
+    .back-link {
+      display: block;
+      margin: 1rem auto;
+      text-align: center;
+      color: #00aaff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<header>Добавить запись</header>
+
+<form method="post" action="/appointments/create">
+  <input type="hidden" name="date" value="{{ date }}">
+
+  <label for="client_id">Выбери подопечного:</label>
+  <select name="client_id" required>
+    {% for client in clients %}
+      <option value="{{ client[0] }}">{{ client[1] }} ({{ client[2] }} занятий)</option>
+    {% endfor %}
+  </select>
+
+  <label for="time">Время:</label>
+  <input type="time" name="time" required>
+
+  <button type="submit">Записать</button>
+</form>
+
+<a href="/menu" class="back-link">← Назад</a>
+
+</body>
+</html>

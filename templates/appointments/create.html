@@ -1,28 +1,97 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Создать запись</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Запись на тренировку</title>
   <style>
-    body { font-family: sans-serif; padding: 1em; }
-    select, input, button { width: 100%; padding: 1em; margin: 0.5em 0; font-size: 1em; }
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #00aaff;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+    .day {
+      border-bottom: 1px solid #ddd;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .day .info {
+      font-size: 1rem;
+    }
+    .day .date {
+      color: gray;
+      font-size: 0.85rem;
+    }
+    .add-btn {
+      background: #00aaff;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      font-size: 1.4rem;
+      width: 2.5rem;
+      height: 2.5rem;
+      text-align: center;
+      line-height: 2.5rem;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      cursor: pointer;
+    }
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: #fff;
+      border-top: 1px solid #ccc;
+      display: flex;
+      justify-content: space-around;
+      padding: 0.5rem 0;
+    }
+    .bottom-nav a {
+      text-decoration: none;
+      color: #888;
+      font-size: 1.2rem;
+    }
+    .bottom-nav a.active {
+      color: #00aaff;
+    }
   </style>
 </head>
 <body>
-  <h2>Записать подопечного</h2>
-  <form method="post">
-    <label>Подопечный</label>
-    <select name="client_id" required>
-      {% for client in clients %}
-        <option value="{{ client[0] }}">{{ client[1] }}</option>
-      {% endfor %}
-    </select>
-    <label>Дата</label>
-    <input type="date" name="date" required>
-    <label>Время</label>
-    <input type="time" name="time" required>
-    <button type="submit">Записать</button>
-  </form>
-  <a href="/menu">Назад</a>
+
+<header>Записать</header>
+
+<div class="day">
+  <div class="info">
+    <div><strong>Понедельник</strong></div>
+    <div class="date">24 июня</div>
+  </div>
+  <button class="add-btn" onclick="location.href='/appointments/form?date=2025-06-24'">+</button>
+</div>
+
+<div class="day">
+  <div class="info">
+    <div><strong>Вторник</strong></div>
+    <div class="date">25 июня</div>
+  </div>
+  <button class="add-btn" onclick="location.href='/appointments/form?date=2025-06-25'">+</button>
+</div>
+
+<!-- Повтори для остальных дней... -->
+
+<div class="bottom-nav">
+  <a href="/clients">👤</a>
+  <a href="/appointments/create" class="active">📅</a>
+  <a href="/menu">☰</a>
+</div>
+
 </body>
 </html>

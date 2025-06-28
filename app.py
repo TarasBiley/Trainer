@@ -161,6 +161,18 @@ def list_appointments():
         return render_template('appointments/list.html', appointments=appointments, date=date)
     return render_template('appointments/list.html', appointments=None, date=None)
 
+@app.route('/appointments/form')
+def appointment_form():
+    date = request.args.get('date')
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute('SELECT * FROM clients WHERE sessions > 0')
+    clients = cur.fetchall()
+    cur.close()
+    conn.close()
+    return render_template('appointments/form.html', clients=clients, date=date)
+
+
 @app.route('/init')
 def init_db_route():
     from db import init_db
