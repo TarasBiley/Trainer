@@ -95,7 +95,7 @@ def appointment_form():
     return render_template('appointments/form.html', clients=clients, date=date_str)
 
 # ✅ Создание записи
-@app.route('/appointments/create', methods=['POST'])
+@app.route('/appointments/create', methods=['GET', 'POST'])
 def create_appointment():
     client_id = request.form['client_id']
     date_str = request.form['date']
