@@ -75,14 +75,14 @@ def add_sessions(client_id):
     conn.close()
     return redirect('/clients')
 
-# 📅 Календарь – выбор даты
+# 📅 Календарь — выбор даты
 @app.route('/appointments/choose')
 def choose_date():
     today = date.today()
-    dates = [today + timedelta(days=i) for i in range(30)]  # Можно изменить на любое число
+    dates = [today + timedelta(days=i) for i in range(30)]  # 30 дней вперед
     return render_template('appointments/choose_date.html', dates=dates)
 
-# 📝 Форма записи на выбранную дату
+# 📝 Форма записи на дату
 @app.route('/appointments/form')
 def appointment_form():
     date_str = request.args.get('date')
@@ -95,7 +95,7 @@ def appointment_form():
     return render_template('appointments/form.html', clients=clients, date=date_str)
 
 # ✅ Создание записи
-@app.route('/appointments/create', methods=['GET', 'POST'])
+@app.route('/appointments/create', methods=['POST'])
 def create_appointment():
     client_id = request.form['client_id']
     date_str = request.form['date']
@@ -104,7 +104,6 @@ def create_appointment():
     conn = get_db()
     cur = conn.cursor()
 
-    # Проверка на занятость
     cur.execute('SELECT 1 FROM appointments WHERE date = %s AND time = %s', (date_str, time))
     exists = cur.fetchone()
     if exists:
@@ -112,7 +111,6 @@ def create_appointment():
         conn.close()
         return '<h2>Время занято</h2><a href="/appointments/choose">Назад</a>'
 
-    # Уменьшить количество занятий и добавить запись
     cur.execute('UPDATE clients SET sessions = sessions - 1 WHERE id = %s AND sessions > 0', (client_id,))
     cur.execute('INSERT INTO appointments (client_id, date, time) VALUES (%s, %s, %s)', (client_id, date_str, time))
     conn.commit()
