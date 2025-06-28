@@ -11,6 +11,17 @@ app.secret_key = os.environ.get('SECRET_KEY', 'supersecret')
 USERNAME = 'trainer'
 PASSWORD = '1234'
 
+from datetime import date, timedelta
+import locale
+
+locale.setlocale(locale.LC_TIME, 'ru_RU.UTF-8')  # Работает на Unix/macOS. Для Windows: 'Russian_Russia.1251'
+
+@app.route('/appointments/create')
+def choose_date():
+    today = date.today()
+    dates = [today + timedelta(days=i) for i in range(30)]  # 30 дней вперёд
+    return render_template('appointments/choose_date.html', dates=dates)
+
 @app.before_request
 def require_login():
     if request.endpoint not in ('login', 'static') and 'user' not in session:

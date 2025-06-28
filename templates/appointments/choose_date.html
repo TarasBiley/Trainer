@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Записать</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #00aaff;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+    .date-list {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+    .date-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #eee;
+      padding: 1rem;
+    }
+    .date-text {
+      display: flex;
+      flex-direction: column;
+    }
+    .day-name {
+      font-weight: bold;
+    }
+    .add-btn {
+      background: #00aaff;
+      color: white;
+      border: none;
+      font-size: 1.5rem;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 36px;
+      text-decoration: none;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+
+<header>Записать</header>
+
+<ul class="date-list">
+  {% for d in dates %}
+    <li class="date-item">
+      <div class="date-text">
+        <div class="day-name">{{ d.strftime('%A') }}</div>
+        <div>{{ d.strftime('%d %B') }}</div>
+      </div>
+      <a class="add-btn" href="/appointments/create?date={{ d }}">{{ '+' }}</a>
+    </li>
+  {% endfor %}
+</ul>
+
+</body>
+</html>
