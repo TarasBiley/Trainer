@@ -9,8 +9,23 @@ app = Flask(__name__)
 def index():
     return redirect('/menu')
 
-
-
+@app.route('/appointments/list', methods=['GET', 'POST'])
+def list_appointments():
+    if request.method == 'POST':
+        date = request.form['date']
+        conn = get_db()
+        cur = conn.cursor()
+        cur.execute('''
+            SELECT a.id, a.time, c.name FROM appointments a
+            JOIN clients c ON a.client_id = c.id
+            WHERE a.date = %s
+            ORDER BY a.time
+        ''', (date,))
+        appointments = cur.fetchall()
+        cur.close()
+        conn.close()
+        return render_template('appointments/list.html', appointments=appointments, date=date)
+    return render_template('appointments/list.html', appointments=None, date=None)
 
 
 # 🏠 Главное меню

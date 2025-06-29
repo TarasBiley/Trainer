@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>Главное меню</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Меню</title>
   <style>
     body {
-      font-family: sans-serif;
       margin: 0;
-      padding: 0;
+      font-family: sans-serif;
+      background: #f9f9f9;
     }
     header {
       background: #00aaff;
@@ -18,28 +18,35 @@
       font-size: 1.5rem;
     }
     .menu {
+      display: flex;
+      flex-direction: column;
       padding: 1rem;
     }
     .menu a {
       display: block;
+      margin: 0.5rem 0;
       padding: 1rem;
-      margin: 1rem 0;
-      background: #f0f0f0;
+      background: white;
       text-decoration: none;
-      color: black;
-      font-size: 1.2rem;
+      color: #333;
       border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      font-size: 1.2rem;
+      text-align: center;
+    }
+    .menu a:hover {
+      background: #eef6ff;
     }
   </style>
 </head>
 <body>
 
-<header>Меню</header>
+  <header>Меню</header>
 
-<div class="menu">
-    <a href="/appointments/list">Записи</a>
+  <div class="menu">
     <a href="/clients">Подопечные</a>
-</div>
+    <a href="/appointments/choose">Записать</a>
+  </div>
 
 </body>
 </html>
