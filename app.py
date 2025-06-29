@@ -190,11 +190,7 @@ def delete_appt(appt_id):
     return redirect('/appointments/choose')
 
 
-# 🛠 Инициализация базы данных
-@app.route('/init')
-def init_db_route():
-    init_db()
-    return '✅ Таблицы созданы на Railway'
+
 
 # 🚀 Запуск
 if __name__ == '__main__':
