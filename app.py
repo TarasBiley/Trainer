@@ -4,25 +4,14 @@ import os
 from datetime import date, timedelta
 
 app = Flask(__name__)
-app.secret_key = os.environ.get('SECRET_KEY', 'supersecret')
 
-USERNAME = 'trainer'
-PASSWORD = '1234'
+@app.route('/')
+def index():
+    return redirect('/menu')
 
-# 🔒 Авторизация
-@app.before_request
-def require_login():
-    if request.endpoint not in ('login', 'static') and 'user' not in session:
-        return redirect('/')
 
-@app.route('/', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        if request.form['username'] == USERNAME and request.form['password'] == PASSWORD:
-            session['user'] = USERNAME
-            return redirect('/menu')
-        return 'Неверный логин или пароль'
-    return render_template('login.html')
+
+
 
 # 🏠 Главное меню
 @app.route('/menu')
