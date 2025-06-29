@@ -87,16 +87,6 @@ def delete_client(client_id):
     conn.close()
     return redirect('/clients')
 
-@app.route('/clients/add_sessions/<int:client_id>', methods=['POST'])
-def add_sessions(client_id):
-    count = int(request.form['count'])
-    conn = get_db()
-    cur = conn.cursor()
-    cur.execute('UPDATE clients SET sessions = sessions + %s WHERE id = %s', (count, client_id))
-    conn.commit()
-    cur.close()
-    conn.close()
-    return redirect('/clients')
 
 @app.route('/appointments/choose')
 def choose_date():
