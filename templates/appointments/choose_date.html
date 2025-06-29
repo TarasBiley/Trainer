@@ -51,7 +51,7 @@
         {% for appt in appointments[d_str] %}
           <div class="appt">
             {{ appt.name }} — {{ appt.time }} — {{ appt.sessions }} занятий
-            <a href="/appointments/delete/{{ appt.id }}">−</a>
+            <a href="/appointments/delete/{{ appt.id }}">Удалить запись</a>
           </div>
         {% endfor %}
       {% endif %}
