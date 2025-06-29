@@ -22,6 +22,12 @@
     }
   </style>
 </head>
+<script>
+  {% if request.args.get('error') %}
+    alert('⛔ Время занято! Пожалуйста, выберите другое.');
+  {% endif %}
+</script>
+
 <body>
 
   <h2>Добавить запись на {{ date }}</h2>

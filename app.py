@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session, url_for
 from db import get_db, init_db
 import os
 from datetime import date, timedelta
@@ -145,7 +145,7 @@ def create_appointment():
     if exists:
         cur.close()
         conn.close()
-        return '<h2>Время занято</h2><a href="/form.html">Назад</a>'
+        return redirect(url_for('appointment_form', date=date_str, error='1'))
 
     cur.execute('UPDATE clients SET sessions = sessions - 1 WHERE id = %s AND sessions > 0', (client_id,))
     cur.execute('INSERT INTO appointments (client_id, date, time) VALUES (%s, %s, %s)', (client_id, date_str, time))
