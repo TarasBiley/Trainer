@@ -1,63 +1,94 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Записи</title>
+  <meta charset="UTF-8">
+  <title>Календарь записей</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    body { font-family: sans-serif; margin: 0; }
-    header { background: #00aaff; color: white; text-align: center; padding: 1rem; font-size: 1.5rem; }
-    .day {
-      border-bottom: 1px solid #ccc;
-      padding: 0.8rem 1rem;
+    body {
+      font-family: sans-serif;
+      padding: 1rem;
     }
-    .day-header {
+    .date-block {
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 16px;
+      background: #f9f9f9;
+    }
+    .date-block h3 {
+      margin-top: 0;
+    }
+    ul {
+      padding-left: 0;
+      list-style: none;
+      margin: 0;
+    }
+    li {
       display: flex;
       justify-content: space-between;
-      font-weight: bold;
-      font-size: 1.2rem;
+      align-items: center;
+      margin-bottom: 6px;
+      font-size: 16px;
     }
-    .appointments {
-      margin-top: 0.5rem;
-      padding-left: 1rem;
+    .appt-controls {
+      display: flex;
+      gap: 8px;
     }
-    .appt {
-      font-size: 1rem;
-      margin-bottom: 0.4rem;
+    button {
+      font-size: 16px;
+      border-radius: 8px;
+      padding: 4px 10px;
+      border: 1px solid #aaa;
+      cursor: pointer;
+      background: #eaeaea;
     }
-    .link {
-      text-decoration: none;
-      font-size: 1.5rem;
-      color: #00aaff;
+    .delete-btn {
+      color: red;
+      border-color: red;
+      background: #ffecec;
+    }
+    .add-btn {
+      margin-top: 10px;
+      width: 100%;
+    }
+    .back-btn {
+      margin-bottom: 20px;
+      display: inline-block;
     }
   </style>
 </head>
 <body>
 
-<header>Записи</header>
-<a href="/menu" style="display: inline-block; margin: 1rem; padding: 0.5rem 1rem; background: #00aaff; color: white; border-radius: 6px; text-decoration: none;">
-  ← Назад
-</a>
+  <a href="/menu" class="back-btn">← Назад в меню</a>
 
-{% for d in dates %}
-  {% set d_str = d.isoformat() %}
-  <div class="day">
-    <div class="day-header">
-      <div>{{ d.strftime('%d %B') }}</div>
-      <a class="link" href="/appointments/form?date={{ d_str }}">+</a>
-    </div>
-    <div class="appointments">
-      {% if appointments[d_str] %}
-        {% for appt in appointments[d_str] %}
-          <div class="appt">
-            {{ appt.name }} — {{ appt.time }} — {{ appt.sessions }} занятий
-            <a href="/appointments/delete/{{ appt.id }}">−</a>
-          </div>
-        {% endfor %}
+  {% for date in dates %}
+    <div class="date-block">
+      <h3>{{ date.strftime('%d.%m.%Y') }}</h3>
+
+      {% if appointments[date.isoformat()] %}
+        <ul>
+          {% for appt in appointments[date.isoformat()] %}
+            <li>
+              {{ appt.time }} — {{ appt.name }} ({{ appt.sessions }} занятий)
+              <div class="appt-controls">
+                <form action="/appointments/delete/{{ appt.id }}" method="get">
+                  <button type="submit" class="delete-btn">➖</button>
+                </form>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>Нет записей</p>
       {% endif %}
+
+      <form action="/appointments/form" method="get">
+        <input type="hidden" name="date" value="{{ date.isoformat() }}">
+        <button type="submit" class="add-btn">➕ Добавить запись</button>
+      </form>
     </div>
-  </div>
-{% endfor %}
+  {% endfor %}
 
 </body>
 </html>

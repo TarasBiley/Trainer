@@ -145,7 +145,7 @@ def create_appointment():
     if exists:
         cur.close()
         conn.close()
-        return '<h2>Время занято</h2><a href="/appointments/choose">Назад</a>'
+        return '<h2>Время занято</h2><a href="/form.html">Назад</a>'
 
     cur.execute('UPDATE clients SET sessions = sessions - 1 WHERE id = %s AND sessions > 0', (client_id,))
     cur.execute('INSERT INTO appointments (client_id, date, time) VALUES (%s, %s, %s)', (client_id, date_str, time))
