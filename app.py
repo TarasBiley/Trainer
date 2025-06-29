@@ -38,7 +38,7 @@ def menu():
 def clients():
     conn = get_db()
     cur = conn.cursor()
-    cur.execute('SELECT * FROM clients')
+    cur.execute('SELECT * FROM clients ORDER BY id')
     clients = cur.fetchall()
     cur.close()
     conn.close()
@@ -165,7 +165,8 @@ def delete_appt(appt_id):
         conn.commit()
     cur.close()
     conn.close()
-    return redirect('/menu')
+    return redirect('/appointments/choose')
+
 
 # 🛠 Инициализация базы данных
 @app.route('/init')
