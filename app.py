@@ -66,16 +66,29 @@ def add_sessions(client_id):
 @app.route('/clients/add', methods=['GET', 'POST'])
 def add_client():
     if request.method == 'POST':
-        name = request.form['name']
+        name = request.form['name'].strip()
         sessions = int(request.form['sessions'])
+
         conn = get_db()
         cur = conn.cursor()
+
+        # Проверка: есть ли уже клиент с таким именем
+        cur.execute('SELECT id FROM clients WHERE name = %s', (name,))
+        exists = cur.fetchone()
+        if exists:
+            cur.close()
+            conn.close()
+            return redirect('/clients')  # или render_template с сообщением
+
+        # Добавление нового клиента
         cur.execute('INSERT INTO clients (name, sessions) VALUES (%s, %s)', (name, sessions))
         conn.commit()
         cur.close()
         conn.close()
         return redirect('/clients')
+
     return render_template('clients/add.html')
+
 
 @app.route('/clients/delete/<int:client_id>')
 def delete_client(client_id):
