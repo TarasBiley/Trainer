@@ -143,7 +143,8 @@ def create_appointment():
     conn.commit()
     cur.close()
     conn.close()
-    return redirect('/menu')
+    return redirect('/appointments/choose')
+
 
 # 🔁 Редирект если кто-то откроет /appointments/create через GET
 @app.route('/appointments/create', methods=['GET'])
