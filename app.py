@@ -44,6 +44,25 @@ def clients():
     conn.close()
     return render_template('clients/list.html', clients=clients)
 
+@app.route('/clients/add_sessions/<int:client_id>', methods=['POST'])
+def add_sessions(client_id):
+    count = int(request.form['count'])
+    conn = get_db()
+    cur = conn.cursor()
+    # Обновление, не позволяющее числу занятий уйти в минус
+    cur.execute('''
+        UPDATE clients
+        SET sessions = CASE
+            WHEN sessions + %s < 0 THEN 0
+            ELSE sessions + %s
+        END
+        WHERE id = %s
+    ''', (count, count, client_id))
+    conn.commit()
+    cur.close()
+    conn.close()
+    return redirect('/clients')
+
 @app.route('/clients/add', methods=['GET', 'POST'])
 def add_client():
     if request.method == 'POST':

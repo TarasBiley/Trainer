@@ -2,86 +2,90 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Записи</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Подопечные</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
       font-family: sans-serif;
       margin: 0;
-      padding: 0;
-    }
-    header {
-      background: #00aaff;
-      color: white;
       padding: 1rem;
+      background: #f8f8f8;
+    }
+    h1 {
       text-align: center;
-      font-size: 1.4rem;
+      margin-bottom: 1rem;
     }
-    .day {
-      border-bottom: 1px solid #ccc;
+    .client {
+      background: white;
       padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
-    .day-header {
+    .client-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
     }
-    .plus-button {
+    .actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .actions form {
+      display: inline;
+    }
+    .btn {
+      border: none;
       background: #00aaff;
       color: white;
-      border: none;
-      border-radius: 50%;
-      width: 32px;
-      height: 32px;
-      font-size: 1.4rem;
-      line-height: 1;
+      padding: 0.3rem 0.8rem;
+      border-radius: 6px;
+      font-size: 1rem;
       cursor: pointer;
     }
-    .appointment {
-      margin-left: 1rem;
-      padding: 0.5rem 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .btn.delete {
+      background: #ff5c5c;
     }
-    .remove-button {
-      background: #ff4444;
-      border: none;
-      color: white;
-      border-radius: 8px;
-      padding: 0.3rem 0.6rem;
-      font-size: 0.9rem;
-      cursor: pointer;
+    .btn:hover {
+      opacity: 0.9;
+    }
+    .back {
+      display: block;
+      margin-top: 1rem;
+      text-align: center;
+      color: #00aaff;
+      text-decoration: none;
     }
   </style>
 </head>
 <body>
 
-<header>Записи</header>
+<h1>Подопечные</h1>
 
-{% for day in days %}
-<div class="day">
-  <div class="day-header">
-    <div><strong>{{ day.date.strftime('%-d %B') }}</strong></div>
-    <form method="get" action="/appointments/create">
-      <input type="hidden" name="date" value="{{ day.date }}">
-      <button class="plus-button" title="Добавить">+</button>
-    </form>
-  </div>
+<a href="/clients/add" class="btn" style="margin-bottom: 1rem; display: inline-block;">➕ Добавить подопечного</a>
 
-  {% for appt in day.appointments %}
-  <div class="appointment">
-    <div>
-      {{ appt.name }} — {{ appt.time }} <br>
-      {{ appt.sessions }} занятий
+{% for client in clients %}
+  <div class="client">
+    <div class="client-header">
+      <span><strong>{{ client[1] }}</strong> — {{ client[2] }} занятий</span>
+      <div class="actions">
+        <form action="/clients/add_sessions/{{ client[0] }}" method="post">
+          <input type="hidden" name="count" value="1">
+          <button class="btn">➕</button>
+        </form>
+        <form action="/clients/add_sessions/{{ client[0] }}" method="post">
+          <input type="hidden" name="count" value="-1">
+          <button class="btn">➖</button>
+        </form>
+        <a href="/clients/delete/{{ client[0] }}" class="btn delete">Удалить</a>
+      </div>
     </div>
-    <form method="get" action="/appointments/delete/{{ appt.id }}">
-      <button class="remove-button">−</button>
-    </form>
   </div>
-  {% endfor %}
-</div>
 {% endfor %}
+
+<a href="/menu" class="back">← Назад в меню</a>
 
 </body>
 </html>
