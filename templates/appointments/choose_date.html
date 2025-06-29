@@ -1,45 +1,60 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Выбор даты</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Записи</title>
   <style>
-    body { font-family: sans-serif; margin: 0; padding: 1rem; }
-    h1 { text-align: center; }
-    .date-item {
+    body { font-family: sans-serif; margin: 0; }
+    header { background: #00aaff; color: white; text-align: center; padding: 1rem; font-size: 1.5rem; }
+    .day {
+      border-bottom: 1px solid #ccc;
+      padding: 0.8rem 1rem;
+    }
+    .day-header {
       display: flex;
       justify-content: space-between;
-      padding: 1rem;
-      border-bottom: 1px solid #eee;
-    }
-    .date-item a {
-      text-decoration: none;
-      font-size: 1.2rem;
-      color: #00aaff;
       font-weight: bold;
+      font-size: 1.2rem;
+    }
+    .appointments {
+      margin-top: 0.5rem;
+      padding-left: 1rem;
+    }
+    .appt {
+      font-size: 1rem;
+      margin-bottom: 0.4rem;
+    }
+    .link {
+      text-decoration: none;
+      font-size: 1.5rem;
+      color: #00aaff;
     }
   </style>
 </head>
 <body>
-  <h1>Записи</h1>
-  <div id="date-list">
-    {% for d in dates %}
-      <div class="date-item">
-        <span>{{ d.strftime('%d %B') }}</span>
-        <a href="/appointments/form?date={{ d }}">+</a>
-      </div>
-    {% endfor %}
-  </div>
 
-  <script>
-    // Пример простой бесконечной прокрутки (заглушка, требует доработки через API)
-    window.addEventListener('scroll', () => {
-      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-        // Здесь можно сделать fetch к /appointments/choose?page=2
-        console.log('Достигнут конец страницы — подгрузка новых дат...');
-      }
-    });
-  </script>
+<header>Записи</header>
+
+{% for d in dates %}
+  {% set d_str = d.isoformat() %}
+  <div class="day">
+    <div class="day-header">
+      <div>{{ d.strftime('%d %B') }}</div>
+      <a class="link" href="/appointments/form?date={{ d_str }}">+</a>
+    </div>
+    <div class="appointments">
+      {% if appointments[d_str] %}
+        {% for appt in appointments[d_str] %}
+          <div class="appt">
+            {{ appt.name }} — {{ appt.time }} — {{ appt.sessions }} занятий
+            <a href="/appointments/delete/{{ appt.id }}">−</a>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+{% endfor %}
+
 </body>
 </html>

@@ -79,12 +79,35 @@ def add_sessions(client_id):
     conn.close()
     return redirect('/clients')
 
-# 📅 Календарь — выбор даты
 @app.route('/appointments/choose')
 def choose_date():
     today = date.today()
-    dates = [today + timedelta(days=i) for i in range(30)]  # 30 дней вперед
-    return render_template('appointments/choose_date.html', dates=dates)
+    dates = [today + timedelta(days=i) for i in range(30)]
+
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute('''
+        SELECT a.date, a.time, c.name, c.sessions, a.id
+        FROM appointments a
+        JOIN clients c ON a.client_id = c.id
+    ''')
+    rows = cur.fetchall()
+    cur.close()
+    conn.close()
+
+    appointments = {}
+    for row in rows:
+        date_str = row[0].isoformat()
+        if date_str not in appointments:
+            appointments[date_str] = []
+        appointments[date_str].append({
+            'time': row[1].strftime('%H:%M'),
+            'name': row[2],
+            'sessions': row[3],
+            'id': row[4],
+        })
+
+    return render_template('appointments/choose_date.html', dates=dates, appointments=appointments)
 
 # 📝 Форма записи на дату
 @app.route('/appointments/form')
