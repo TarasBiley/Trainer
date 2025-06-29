@@ -1,31 +1,91 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
+  <meta charset="UTF-8">
+  <title>Подопечные</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Список подопечных</title>
   <style>
-    body { font-family: sans-serif; padding: 1em; }
-    li { margin-bottom: 1.2em; }
-    form { display: flex; gap: 0.5em; margin-top: 0.5em; }
-    input, button { flex: 1; padding: 0.5em; font-size: 1em; }
-    button, a { text-decoration: none; }
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 1rem;
+      background: #f8f8f8;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .client {
+      background: white;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .client-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+    .actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .actions form {
+      display: inline;
+    }
+    .btn {
+      border: none;
+      background: #00aaff;
+      color: white;
+      padding: 0.3rem 0.8rem;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .btn.delete {
+      background: #ff5c5c;
+    }
+    .btn:hover {
+      opacity: 0.9;
+    }
+    .back {
+      display: block;
+      margin-top: 1rem;
+      text-align: center;
+      color: #00aaff;
+      text-decoration: none;
+    }
   </style>
 </head>
 <body>
-  <h2>Список подопечных</h2>
-  <a href="/clients/add">Добавить подопечного</a>
-  <ul>
-    {% for client in clients %}
-      <li>
-        {{ client[1] }} — занятий: {{ client[2] }}
-        <form method="post" action="/clients/add_sessions/{{ client[0] }}">
-          <input type="number" name="count" value="1" min="1">
-          <button type="submit">+ Занятий</button>
+
+<h1>Подопечные</h1>
+
+<a href="/clients/add" class="btn" style="margin-bottom: 1rem; display: inline-block;">➕ Добавить подопечного</a>
+
+{% for client in clients %}
+  <div class="client">
+    <div class="client-header">
+      <span><strong>{{ client[1] }}</strong> — {{ client[2] }} занятий</span>
+      <div class="actions">
+        <form action="/clients/add_sessions/{{ client[0] }}" method="post">
+          <input type="hidden" name="count" value="1">
+          <button class="btn">➕</button>
         </form>
-        <a href="/clients/delete/{{ client[0] }}">Удалить</a>
-      </li>
-    {% endfor %}
-  </ul>
-  <a href="/menu">Назад</a>
+        <form action="/clients/add_sessions/{{ client[0] }}" method="post">
+          <input type="hidden" name="count" value="-1">
+          <button class="btn">➖</button>
+        </form>
+        <a href="/clients/delete/{{ client[0] }}" class="btn delete">Удалить</a>
+      </div>
+    </div>
+  </div>
+{% endfor %}
+
+<a href="/menu" class="back">← Назад в меню</a>
+
 </body>
 </html>
