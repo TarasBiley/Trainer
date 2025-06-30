@@ -36,6 +36,5 @@ def init_db():
     conn.close()
     print("✅ Таблицы успешно созданы.")
 
-'''
-if __name__ == '__main__':
-    init_db()
+
+
